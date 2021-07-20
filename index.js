@@ -71,8 +71,8 @@ Vector.add3 = function (vec1, vec2, vec3){
 
 //Vector Normal of a plane
 Vector.Norm = function (vertexes){
-     let vec1 = Vector.fromPoints (vertexes[1], vertexes[0]);
-     let vec2 = Vector.fromPoints (vertexes[2], vertexes[0]);
+     let vec1 = Vector.fromPoints (vers[1], verts[0]);
+     let vec2 = Vector.fromPoints (verts[2], verts[0]);
      let p = Vector.crossProduct (vec1, vec2);
      return Vector.Unit(p);
 };
@@ -88,12 +88,12 @@ function wait(ms)
 
 //Checks if the point is inside the triangle
 checkInside = function (object, point){
-     var border0 = Vector.fromPoints(object.vertexes[0], object.vertexes[1]);
-     var border1 = Vector.fromPoints(object.vertexes[1], object.vertexes[2]);
-     var border2 = Vector.fromPoints(object.vertexes[2], object.vertexes[0]);
-     var C0 = Vector.fromPoints(object.vertexes[0],point);
-     var C1 = Vector.fromPoints(object.vertexes[1],point);
-     var C2 = Vector.fromPoints(object.vertexes[2],point);
+     var border0 = Vector.fromPoints(object.verts[0], object.verts[1]);
+     var border1 = Vector.fromPoints(object.verts[1], object.verts[2]);
+     var border2 = Vector.fromPoints(object.verts[2], object.verts[0]);
+     var C0 = Vector.fromPoints(object.verts[0],point);
+     var C1 = Vector.fromPoints(object.verts[1],point);
+     var C2 = Vector.fromPoints(object.verts[2],point);
 
      if (Vector.dotProduct(object.normal, Vector.crossProduct(border0, C0)) > 0 &&
          Vector.dotProduct(object.normal, Vector.crossProduct(border1, C1)) > 0 &&

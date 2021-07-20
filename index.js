@@ -136,7 +136,7 @@ var object = {
      name : "triangle",
      position: {x: 0.0, y: 5.0, z: 0.0},
      rotation:    {a: 0.0, b: 0.0, c: 0.0},
-     vertexes:[
+     verts:[
           {x: -1.0, y: 0.0, z: -0.5},
           {x:  1.0, y: 0.0, z: -0.5},
           {x:  0.0, y:  0.0, z: 1.0}
@@ -156,23 +156,23 @@ function recursion(){
      }
 
      let global_obj = {
-          vertexes:
+          verts:
                [
-               vertex_globalPos (object.vertexes[0], object.position, object.rotation),
-               vertex_globalPos (object.vertexes[1], object.position, object.rotation),
-               vertex_globalPos (object.vertexes[2], object.position, object.rotation)
+               vertex_globalPos (object.verts[0], object.position, object.rotation),
+               vertex_globalPos (object.verts[1], object.position, object.rotation),
+               vertex_globalPos (object.verts[2], object.position, object.rotation)
           ]
      }
 
-     global_obj.normal = Vector.Norm (global_obj.vertexes)
+     global_obj.normal = Vector.Norm (global_obj.verts)
 
      intensity = -Vector.dotProduct(fake_light_dir,global_obj.normal);
 
      if (intensity<.05){intensity=.05};
 
-     let vec2Point = Vector.fromPoints (global_camera.position,global_obj.vertexes[0])
+     let vec2Point = Vector.fromPoints (global_camera.position,global_obj.verts[0])
 
-     let D = Vector.dotProduct(global_obj.vertexes[0], global_obj.normal)
+     let D = Vector.dotProduct(global_obj.verts[0], global_obj.normal)
 
      //ray versors
      var eyeVec  = Vector.Unit(Vector.fromPoints (global_camera.position, global_camera.target));

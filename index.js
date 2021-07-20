@@ -1,11 +1,8 @@
-
-
-
-
-
-// Rotational Matrix
+// Raytracing of a revolving triangle in Javasctipt
 
 let Origin = {x:0.0, y:0.0, z:0.0};
+
+// Rotational Matrix
 function Rmatrix (r) {
      return [
           [Math.cos(r.c)*Math.cos(r.b), Math.cos(r.c)*Math.sin(r.b)*Math.sin(r.a), Math.cos(r.c)*Math.sin(r.b)*Math.cos(r.a)+Math.sin(r.c)*Math.sin(r.a)],
@@ -23,8 +20,6 @@ function vertex_globalPos (vertex, translation, rotation){
 }
 
 Vector = {}
-
-Vector.UP = {x:0, y:1, z:0};
 
 // tridimentional vector from point A to point B
 Vector.fromPoints = function(A,B) {
@@ -56,6 +51,7 @@ Vector.scale = function (v, t){
      return {x: v.x*t,  y: v.y*t,  z: v.z*t}
 };
 
+//Vector addition
 Vector.add = function (vect1, vect2){
      return {
           x: vect1.x + vect2.x,
@@ -64,6 +60,7 @@ Vector.add = function (vect1, vect2){
      }
 }
 
+//Vector 3addition
 Vector.add3 = function (vec1, vec2, vec3){
      return {
           x: vec1.x + vec2.x + vec3.x,
@@ -72,12 +69,14 @@ Vector.add3 = function (vec1, vec2, vec3){
      }
 }
 
+//Vector Normal of a plane
 Vector.Norm = function (vertexes){
      let vec1 = Vector.fromPoints (vertexes[1], vertexes[0]);
      let vec2 = Vector.fromPoints (vertexes[2], vertexes[0]);
      let p = Vector.crossProduct (vec1, vec2);
      return Vector.Unit(p);
 };
+
 
 function wait(ms)
 {
@@ -87,7 +86,7 @@ function wait(ms)
     while(d2-d < ms);
 }
 
-
+//Checks if the point is inside the triangle
 checkInside = function (object, point){
      var border0 = Vector.fromPoints(object.vertexes[0], object.vertexes[1]);
      var border1 = Vector.fromPoints(object.vertexes[1], object.vertexes[2]);
@@ -156,46 +155,46 @@ function recursion(){
           UP: vertex_globalPos (camera.UP,Origin, camera.rotation)
      }
 
-let global_obj = {
-     vertexes:
-          [
-          vertex_globalPos (object.vertexes[0], object.position, object.rotation),
-          vertex_globalPos (object.vertexes[1], object.position, object.rotation),
-          vertex_globalPos (object.vertexes[2], object.position, object.rotation)
+     let global_obj = {
+          vertexes:
+               [
+               vertex_globalPos (object.vertexes[0], object.position, object.rotation),
+               vertex_globalPos (object.vertexes[1], object.position, object.rotation),
+               vertex_globalPos (object.vertexes[2], object.position, object.rotation)
           ]
-}
+     }
 
-global_obj.normal = Vector.Norm (global_obj.vertexes)
+     global_obj.normal = Vector.Norm (global_obj.vertexes)
 
-intensity = -Vector.dotProduct(fake_light_dir,global_obj.normal);
-if (intensity<.05){intensity=.05};
+     intensity = -Vector.dotProduct(fake_light_dir,global_obj.normal);
 
-let vec2Point = Vector.fromPoints (global_camera.position,global_obj.vertexes[0])
-//console.log("vettore", vec2Point)
+     if (intensity<.05){intensity=.05};
 
-let D = Vector.dotProduct(global_obj.vertexes[0], global_obj.normal)
+     let vec2Point = Vector.fromPoints (global_camera.position,global_obj.vertexes[0])
 
-//ray versors
-var eyeVec  = Vector.Unit(Vector.fromPoints (global_camera.position, global_camera.target));
-var vpRight = Vector.Unit(Vector.crossProduct(eyeVec, global_camera.UP));
-var vpUp    = Vector.Unit(Vector.crossProduct(vpRight, eyeVec));
+     let D = Vector.dotProduct(global_obj.vertexes[0], global_obj.normal)
 
-fovRadians = (Math.PI * (camera.fieldOfView / 2)) / 180,
-heightWidthRatio = height / width,
-halfWidth = Math.tan(fovRadians),
-halfHeight = heightWidthRatio * halfWidth,
-camerawidth = halfWidth * 2,
-cameraheight = halfHeight * 2,
-pixelWidth = camerawidth / (width - 1),
-pixelHeight = cameraheight / (height - 1);
+     //ray versors
+     var eyeVec  = Vector.Unit(Vector.fromPoints (global_camera.position, global_camera.target));
+     var vpRight = Vector.Unit(Vector.crossProduct(eyeVec, global_camera.UP));
+     var vpUp    = Vector.Unit(Vector.crossProduct(vpRight, eyeVec));
 
-var ray = {
-    point: global_camera.position
-  };
+     fovRadians = (Math.PI * (camera.fieldOfView / 2)) / 180,
+     heightWidthRatio = height / width,
+     halfWidth = Math.tan(fovRadians),
+     halfHeight = heightWidthRatio * halfWidth,
+     camerawidth = halfWidth * 2,
+     cameraheight = halfHeight * 2,
+     pixelWidth = camerawidth / (width - 1),
+     pixelHeight = cameraheight / (height - 1);
+ 
+     var ray = {
+         point: global_camera.position
+     };
 
-  var index;
-  for (var x = 0; x < width; x++) {
-       for (var y = 0; y < height; y++) {
+     var index;
+     for (var x = 0; x < width; x++) {
+         for (var y = 0; y < height; y++) {
 
             var xcomp = Vector.scale(vpRight, x * pixelWidth - halfWidth);
             var ycomp = Vector.scale(vpUp,  halfHeight -y * pixelHeight);
@@ -218,7 +217,6 @@ var ray = {
                  data.data[index + 1] = 0;
                  data.data[index + 2] = 0;
                  data.data[index + 3] = 255;
-                 //console.log("false")
             }
 
        }

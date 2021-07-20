@@ -116,16 +116,6 @@ c.height = height;
 var ctx = c.getContext("2d"),
 data = ctx.getImageData(0, 0, width, height);
 
-
-//         yA (UP)
-//          |
-//          |
-//          |
-//          C--------->x (RIGHT)
-//         /
-//        /
-//       Vz ()
-
 //var scene = {};
 
 var fake_light_dir = Vector.Unit({x:0.0, y:0.5,z:-1});
@@ -135,12 +125,6 @@ var fake_light_dir = Vector.Unit({x:0.0, y:0.5,z:-1});
 
 
 // CAMERA
-
-
-
-
-
-
 var camera = {
      position: {x:0.0,  y:0.0,  z:0.0},
      target: {x:0.0, y:0.0, z: -1.0},
@@ -148,19 +132,6 @@ var camera = {
      UP: {x:0.0, y:1.0, z:0.0},
      rotation: {a: Math.PI/2, b:0.0, c:0.0}
 }
-
-
-
-
-
-//camera = {
-//     point:       {x: 0.0, y: 0.0, z: 0.0},
-//     fieldOfView: 45,
-//     targetPoint: {x: 0.0, y: 0.0, z: -5.0},
-//};
-
-
-
 
 var object = {
      name : "triangle",
@@ -185,13 +156,6 @@ function recursion(){
           UP: vertex_globalPos (camera.UP,Origin, camera.rotation)
      }
 
-     //console.log ("position: ", global_camera.position);
-     //console.log ("target: ",   global_camera.target);
-     //console.log ("UP: ",       global_camera.UP);
-
-
-//object.rotation.c = object.rotation.c + Math.PI/128;
-
 let global_obj = {
      vertexes:
           [
@@ -201,12 +165,7 @@ let global_obj = {
           ]
 }
 
-//console.log ("v1: ", global_obj.vertexes[0]);
-//console.log ("v2: ", global_obj.vertexes[1]);
-//console.log ("v3: ", global_obj.vertexes[2]);
-
 global_obj.normal = Vector.Norm (global_obj.vertexes)
-//console.log ("normal: ", global_obj.normal.x, global_obj.normal.y, global_obj.normal.z);
 
 intensity = -Vector.dotProduct(fake_light_dir,global_obj.normal);
 if (intensity<.05){intensity=.05};
@@ -215,17 +174,11 @@ let vec2Point = Vector.fromPoints (global_camera.position,global_obj.vertexes[0]
 //console.log("vettore", vec2Point)
 
 let D = Vector.dotProduct(global_obj.vertexes[0], global_obj.normal)
-//console.log("D = "+D)
 
 //ray versors
 var eyeVec  = Vector.Unit(Vector.fromPoints (global_camera.position, global_camera.target));
 var vpRight = Vector.Unit(Vector.crossProduct(eyeVec, global_camera.UP));
 var vpUp    = Vector.Unit(Vector.crossProduct(vpRight, eyeVec));
-
-//console.log ("eyeVec: ", eyeVec);
-//console.log ("vpRight: ", vpRight);
-//console.log ("vpUp: ", vpUp);
-
 
 fovRadians = (Math.PI * (camera.fieldOfView / 2)) / 180,
 heightWidthRatio = height / width,
@@ -235,10 +188,6 @@ camerawidth = halfWidth * 2,
 cameraheight = halfHeight * 2,
 pixelWidth = camerawidth / (width - 1),
 pixelHeight = cameraheight / (height - 1);
-
-//console.log ("pixelWidth",pixelWidth);
-//console.log ("halfWidth",halfWidth);
-
 
 var ray = {
     point: global_camera.position
@@ -250,25 +199,20 @@ var ray = {
 
             var xcomp = Vector.scale(vpRight, x * pixelWidth - halfWidth);
             var ycomp = Vector.scale(vpUp,  halfHeight -y * pixelHeight);
-            //alert(xcomp.x+" "+xcomp.y+" "+xcomp.z+"          "+zcomp.x+" "+zcomp.y+" "+zcomp.z)
-            //console.log ("xcomp: ",xcomp)
-            //xcomp = {x: 0, y:0, z:0};
-            //ycomp = {x: 0, y:0, z:0};
+
             ray.vector = Vector.Unit(Vector.add3(eyeVec, xcomp, ycomp));
-          //console.log(ray.vector);
-            //alert(ray.vector.x+" "+ray.vector.y+" "+ray.vector.z)
+
             dist = (Vector.dotProduct (global_obj.normal, global_camera.position)+D)/Vector.dotProduct (global_obj.normal, ray.vector);
-             //console.log(dist);
-            // Intersection point
+
             ray.endPoint = Vector.add(ray.point, Vector.scale(ray.vector, dist));
-            //console.log("hitPoint: x ",ray.endPoint)
+
             index = x * 4 + y * width * 4;
             if (checkInside(global_obj, ray.endPoint)==true){
                  data.data[index + 0] = 255*intensity;
                  data.data[index + 1] = 255*intensity;
                  data.data[index + 2] = 255*intensity;
                  data.data[index + 3] = 255;
-                 //console.log("true")
+
             } else{
                  data.data[index + 0] = 0;
                  data.data[index + 1] = 0;

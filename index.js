@@ -13,9 +13,9 @@ function Rmatrix (r) {
 
 function vertex_globalPos (vertex, translation, rotation){
      return {
-          x: translation.x + vertex.x*Rmatrix(rotation)[0][0] + vertex.y*Rmatrix(rotation)[0][1] + vertex.z*Rmatrix(rotation)[0][2],
-          y: translation.y + vertex.x*Rmatrix(rotation)[1][0] + vertex.y*Rmatrix(rotation)[1][1] + vertex.z*Rmatrix(rotation)[1][2],
-          z: translation.z + vertex.x*Rmatrix(rotation)[2][0] + vertex.y*Rmatrix(rotation)[2][1] + vertex.z*Rmatrix(rotation)[2][2]
+          x: position.x + vertex.x*Rmatrix(rotation)[0][0] + vertex.y*Rmatrix(rotation)[0][1] + vertex.z*Rmatrix(rotation)[0][2],
+          y: position.y + vertex.x*Rmatrix(rotation)[1][0] + vertex.y*Rmatrix(rotation)[1][1] + vertex.z*Rmatrix(rotation)[1][2],
+          z: position.z + vertex.x*Rmatrix(rotation)[2][0] + vertex.y*Rmatrix(rotation)[2][1] + vertex.z*Rmatrix(rotation)[2][2]
      }
 }
 

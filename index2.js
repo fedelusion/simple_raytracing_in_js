@@ -124,7 +124,7 @@ checkInside = function (object, point){
 //---------------------------------------------------------------------------------------------------------------
 
 var c = document.getElementById("canv");
-var scala = 0.00625;
+var scala = 0.5; //0.00625;
 var width = 640*scala;
 var height = 480*scala;
 
@@ -146,7 +146,7 @@ var fake_light_dir = Vector.Unit({x:0.0, y:0.5,z:-1});
 var camera = {
      position: {x:0.0,  y:0.0,  z:0.0},
      target: {x:0.0, y:0.0, z: -1.0},
-     fieldOfView : 30,
+     fieldOfView : 60,
      UP: {x:0.0, y:1.0, z:0.0},
      rotation: {a:Math.PI/2, b:0.0, c:0.0}
 }
@@ -174,7 +174,7 @@ var solid = {
 var solid = {
      name : "cube",
      position: {x: 0.0, y: 5.0, z: 0.0},
-     rotation: {a:0.0, b:0.0, c: 0.0},
+     rotation: {a:0.0, b:Math.PI/4, c: Math.PI/4},
      connections: [
           [0,1,5],
           [0,5,4],
@@ -190,14 +190,14 @@ var solid = {
           [4,5,6]
      ],
      verts: [
-          {x:  1.0, y: -1.0, z: -1.0},
-          {x:  1.0, y:  1.0, z: -1.0},
-          {x: -1.0, y:  1.0, z: -1.0},
-          {x: -1.0, y: -1.0, z: -1.0},
-          {x:  1.0, y:  1.0, z:  1.0},
-          {x:  1.0, y:  1.0, z:  1.0},
-          {x: -1.0, y:  1.0, z:  1.0},
-          {x: -1.0, y: -1.0, z:  1.0}
+          {x:  1.0, y: -1.0, z: -1.0},   //0
+          {x:  1.0, y:  1.0, z: -1.0},   //1
+          {x: -1.0, y:  1.0, z: -1.0},   //2
+          {x: -1.0, y: -1.0, z: -1.0},   //3
+          {x:  1.0, y: -1.0, z:  1.0},   //4
+          {x:  1.0, y:  1.0, z:  1.0},   //5
+          {x: -1.0, y:  1.0, z:  1.0},   //6
+          {x: -1.0, y: -1.0, z:  1.0}    //7
      ]
 
 };
@@ -208,8 +208,8 @@ var solid = {
 
 function recursion(){
 
-     //solid.rotation.c  = solid.rotation.c + Math.PI/128;
-     //solid.rotation.b  = solid.rotation.b + Math.PI/128;
+     solid.rotation.c  = solid.rotation.c + Math.PI/128;
+     solid.rotation.b  = solid.rotation.b + Math.PI/128;
 
 
      global_camera = {
@@ -293,8 +293,9 @@ function recursion(){
                                              //console.log("temp_triangle",triangle.verts);
                triangle.normal = global_solid.normal[face];
                                              //console.log("triangle_norm", triangle.normal)
-
-               var D = Vector.dotProduct(triangle.verts[solid.connections[face][0]], triangle.normal)
+               //console.log("TRIANGLE VERTS "+face+ " 0" , triangle.verts[solid.connections[face][0]])
+               //console.log("TRIANGLE CONNECTIONS "+face+ " 0" , solid.connections[face][0])
+               var D = Vector.dotProduct(triangle.verts[0], triangle.normal)
                                              //console.log ("D"+face+": "+D);
                if (D>=0){
                                              //console.log("la faccia "+face+" non è in vista");
@@ -323,6 +324,6 @@ function recursion(){
 
   ctx.putImageData(data, 0, 0);
 }
-//setInterval(() => {
+setInterval(() => {
   	recursion();
-//}, 50);
+}, 50);
